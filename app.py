@@ -10,15 +10,15 @@ from io import BytesIO
 class InferlessPythonModel:
   def initialize(self):
       folder_path = "/var/nfs-mount/manoj_azure_volume"
-      self.tokenizer = AutoTokenizer.from_pretrained("TheBloke/CodeLlama-34B-Python-GPTQ", use_fast=True)
+      self.tokenizer = AutoTokenizer.from_pretrained("TheBloke/CodeLlama-34B-Python-GPTQ", use_fast=True).to('cuda')
       self.model = AutoGPTQForCausalLM.from_quantized(
         "TheBloke/CodeLlama-34B-Python-GPTQ",
         use_safetensors=True,
-        device="cuda:0",
         quantize_config=None,
         inject_fused_attention=False
-      )
+      ).to('cuda')
       self.model.save_pretrained(folder_path)
+      self.tokensizer.save_pretrained(folder_path)
 
   def infer(self, inputs):
     prompt = inputs["prompt"]
