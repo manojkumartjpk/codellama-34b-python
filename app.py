@@ -9,6 +9,7 @@ from io import BytesIO
 
 class InferlessPythonModel:
   def initialize(self):
+      folder_path = "/var/nfs-mount/manoj_azure_volume"
       self.tokenizer = AutoTokenizer.from_pretrained("TheBloke/CodeLlama-34B-Python-GPTQ", use_fast=True)
       self.model = AutoGPTQForCausalLM.from_quantized(
         "TheBloke/CodeLlama-34B-Python-GPTQ",
@@ -17,6 +18,7 @@ class InferlessPythonModel:
         quantize_config=None,
         inject_fused_attention=False
       )
+      self.model.save_pretrained(folder_path)
 
   def infer(self, inputs):
     prompt = inputs["prompt"]
